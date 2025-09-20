@@ -16,8 +16,7 @@ export default function MainLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
   const getIsActive = (href: string) => {
-    if (href === '/new-scan' && pathname === '/') return true;
-    if (href === '/dashboard' && pathname === '/') return true; // Default to dashboard
+    if (href === '/dashboard' && pathname === '/') return true;
     return pathname.startsWith(href);
   };
 

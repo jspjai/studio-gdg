@@ -1,6 +1,5 @@
-import NewScanPage from './new-scan/page';
+import DashboardPage from './dashboard/page';
 
-// This page now renders the content of the new-scan page as the default for the app.
 export default function AppPage() {
-  return <NewScanPage />;
+  return <DashboardPage />;
 }
