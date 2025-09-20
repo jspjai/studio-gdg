@@ -38,21 +38,23 @@ export default function RootPage() {
       </header>
       <main className="flex-1">
           {/* Hero Section */}
-          <section className="py-20 md:py-32">
-            <div className="container text-center">
-              <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
-                Proactive Cybersecurity, Powered by AI
-              </h1>
-              <p className="mt-6 max-w-3xl mx-auto text-lg leading-8 text-muted-foreground">
-                AegisAI leverages cutting-edge AI to provide comprehensive vulnerability scanning and autonomous penetration testing. Secure your web applications before attackers strike.
-              </p>
-              <div className="mt-10 flex items-center justify-center gap-x-6">
-                <Button asChild size="lg">
-                  <Link href="/dashboard">Start Your First Scan</Link>
-                </Button>
-                <Button asChild variant="outline" size="lg">
-                  <Link href="#features">Learn More</Link>
-                </Button>
+          <section className="relative py-20 md:py-32 aurora-bg">
+            <div className="container text-center relative z-10">
+              <div className="animate-fade-in-up">
+                <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
+                  Proactive Cybersecurity, Powered by AI
+                </h1>
+                <p className="mt-6 max-w-3xl mx-auto text-lg leading-8 text-muted-foreground">
+                  AegisAI leverages cutting-edge AI to provide comprehensive vulnerability scanning and autonomous penetration testing. Secure your web applications before attackers strike.
+                </p>
+                <div className="mt-10 flex items-center justify-center gap-x-6">
+                  <Button asChild size="lg">
+                    <Link href="/dashboard">Start Your First Scan</Link>
+                  </Button>
+                  <Button asChild variant="outline" size="lg">
+                    <Link href="#features">Learn More</Link>
+                  </Button>
+                </div>
               </div>
             </div>
           </section>
@@ -60,12 +62,12 @@ export default function RootPage() {
           {/* Services Section */}
           <section id="services" className="py-20 bg-card">
             <div className="container">
-              <div className="text-center">
+              <div className="text-center animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
                 <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Our Services</h2>
                 <p className="mt-4 text-lg text-muted-foreground">Two powerful tools to fortify your digital assets.</p>
               </div>
               <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
-                <Card className="flex flex-col">
+                <Card className="flex flex-col animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
                   <CardHeader>
                     <div className="flex items-center gap-4">
                       <ScanSearch className="w-10 h-10 text-accent" />
@@ -86,7 +88,7 @@ export default function RootPage() {
                     </Button>
                   </div>
                 </Card>
-                <Card className="flex flex-col">
+                <Card className="flex flex-col animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
                   <CardHeader>
                     <div className="flex items-center gap-4">
                       <Target className="w-10 h-10 text-accent" />
@@ -114,13 +116,13 @@ export default function RootPage() {
           {/* Features Section */}
           <section id="features" className="py-20 md:py-32">
             <div className="container">
-              <div className="text-center">
+              <div className="text-center animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
                 <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Why Choose AegisAI?</h2>
                 <p className="mt-4 text-lg text-muted-foreground">Comprehensive features designed for developers and security professionals.</p>
               </div>
               <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {features.map((feature, index) => (
-                  <div key={index} className="flex items-start gap-3">
+                  <div key={index} className="flex items-start gap-3 animate-fade-in-up" style={{ animationDelay: `${0.4 + index * 0.1}s` }}>
                     <CheckCircle className="w-6 h-6 text-accent flex-shrink-0 mt-1" />
                     <div>
                       <h3 className="font-semibold">{feature}</h3>

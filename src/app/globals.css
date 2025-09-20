@@ -66,3 +66,23 @@
     @apply bg-background text-foreground;
   }
 }
+
+.aurora-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.aurora-bg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(ellipse 80% 80% at 20% -10%, hsla(var(--primary), 0.3), transparent),
+    radial-gradient(ellipse 80% 80% at 80% 110%, hsla(var(--accent), 0.3), transparent);
+  -webkit-animation: aurora 12s ease-in-out infinite;
+  animation: aurora 12s ease-in-out infinite;
+  z-index: 0;
+}
