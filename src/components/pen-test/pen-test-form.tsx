@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
@@ -238,7 +239,7 @@ export default function PenTestForm() {
                         <Separator />
                         <div>
                             <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2"><Code2 className="h-4 w-4" /> Proof of Concept (POC)</h4>
-                            <pre className="bg-muted p-3 rounded-md text-xs overflow-x-auto text-muted-foreground whitespace-pre-wrap font-code">
+                            <pre className="bg-muted p-3 rounded-md text-xs overflow-x-auto text-muted-foreground whitespace-pre-wrap font-mono">
                                 <code>{vector.poc}</code>
                             </pre>
                         </div>
