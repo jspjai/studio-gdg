@@ -83,7 +83,6 @@ export default function PenTestForm() {
     const element = reportRef.current;
     if (!element) return;
 
-    // Dynamically import jspdf and html2canvas only when needed
     const { default: jsPDF } = await import('jspdf');
     const { default: html2canvas } = await import('html2canvas');
 
