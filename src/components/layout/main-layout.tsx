@@ -2,12 +2,13 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Shield, ScanLine, LayoutDashboard } from 'lucide-react';
+import { Shield, ScanLine, LayoutDashboard, Target } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { ReactNode } from 'react';
 
 const navItems = [
   { href: '/', label: 'New Scan', icon: ScanLine },
+  { href: '/pen-test', label: 'Pen Test', icon: Target },
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
 ];
 
