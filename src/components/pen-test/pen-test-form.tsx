@@ -157,7 +157,7 @@ export default function PenTestForm() {
   return (
     <div className="space-y-6">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-start gap-2">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col sm:flex-row items-start gap-2">
           <FormField
             control={form.control}
             name="url"
@@ -170,7 +170,7 @@ export default function PenTestForm() {
               </FormItem>
             )}
           />
-          <Button type="submit" disabled={loading} className="h-12 text-base px-6">
+          <Button type="submit" disabled={loading} className="h-12 text-base px-6 w-full sm:w-auto">
             <Target className="mr-2 h-5 w-5" />
             {loading ? 'Testing...' : 'Start Test'}
           </Button>
