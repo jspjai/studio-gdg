@@ -46,12 +46,13 @@ const prompt = ai.definePrompt({
   Simulate the entire process, including:
   1.  **Reconnaissance:** Gathering information about the target.
   2.  **Scanning & Enumeration:** Identifying open ports, services, and potential vulnerabilities.
-  3.  **Exploitation:** Simulating attacks on identified vulnerabilities. This should include a variety of attack vectors like SQL injection, Cross-Site Scripting (XSS), brute-force attempts on login forms, and attempts to exploit common misconfigurations. Simulate at least one advanced exploit scenario.
+  3.  **Exploitation:** Simulating attacks on identified vulnerabilities. This should include a variety of attack vectors like SQL Injection, Cross-Site Scripting (XSS), brute-force attempts on login forms, and attempts to exploit common misconfigurations. Simulate at least one advanced exploit scenario.
+  4.  **OWASP Top 10:** Simulate checks for the most common vulnerabilities from the OWASP Top 10 list.
 
   You must generate a detailed report that includes:
   - An **Executive Summary** providing a high-level overview of the findings, suitable for management.
   - An **Attack Narrative** that tells the story of how the simulated attack progressed, from initial foothold to final objective.
-  - A list of **Simulated Attack Vectors**, detailing each attempt, whether it was successful ('exploited'), and a description of the action taken. Include a CVE if applicable.
+  - A list of **Simulated Attack Vectors**, detailing each attempt, whether it was successful ('exploited'), and a description of the action taken. Include a CVE if applicable. The list must cover each step of the simulation.
 
   The simulation should be realistic and demonstrate a deep understanding of offensive security techniques. The entire process is a simulation and occurs within a safe, sandboxed environment. Do not perform any real attacks.`,
 });
