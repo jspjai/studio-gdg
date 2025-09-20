@@ -22,6 +22,8 @@ const AttackVectorSchema = z.object({
   description: z.string().describe('A detailed description of the simulated attack and its outcome.'),
   exploited: z.boolean().describe('Whether the simulated exploit was successful.'),
   cve: z.string().optional().describe('The CVE identifier if the exploit is related to a known vulnerability.'),
+  poc: z.string().describe('A detailed, technical Proof of Concept (POC) explaining how the simulated exploit was performed. Include code snippets or request/response examples.'),
+  remediation: z.string().describe('Step-by-step instructions on how to fix the vulnerability.'),
 });
 
 const PerformPenTestOutputSchema = z.object({
@@ -62,7 +64,11 @@ const prompt = ai.definePrompt({
   You must generate a detailed report that includes:
   - An **Executive Summary** providing a high-level overview of the findings, suitable for management.
   - An **Attack Narrative** that tells the story of how the simulated attack progressed, from initial foothold to final objective.
-  - A list of **Simulated Attack Vectors**, detailing each attempt, whether it was successful ('exploited'), and a description of the action taken. Include a CVE if applicable. The list must cover each step of the simulation.
+  - A list of **Simulated Attack Vectors**, detailing each attempt. For each vector, you must provide:
+    - **description**: A clear description of the action taken.
+    - **exploited**: Whether the simulated exploit was successful.
+    - **poc**: A detailed, technical Proof of Concept (POC) that explains how the simulated attack works. Include example code snippets, payloads, or HTTP requests where applicable.
+    - **remediation**: Actionable, step-by-step instructions for developers to fix the identified vulnerability.
 
   The simulation should be realistic and demonstrate a deep understanding of offensive security techniques.`,
 });

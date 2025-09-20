@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -16,11 +16,12 @@ import {
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
 import { performPenetrationTest } from '@/lib/actions';
-import { Target, Terminal, Loader2, CheckCircle2, XCircle } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
+import { Target, Loader2, CheckCircle2, XCircle, Download, ShieldX, Code2, Wrench } from 'lucide-react';
 import type { PerformPenTestOutput } from '@/ai/flows/perform-pen-test';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
 import { cn } from '@/lib/utils';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
+import { Separator } from '../ui/separator';
 
 const formSchema = z.object({
   url: z.string().url({ message: 'Please enter a valid URL.' }),
@@ -33,7 +34,6 @@ type AttackVectorItem = {
   exploited?: boolean;
 };
 
-// Based on the prompt in perform-pen-test.ts
 const initialChecklist: AttackVectorItem[] = [
   { vector: 'Reconnaissance', status: 'pending' },
   { vector: 'Scanning & Enumeration', status: 'pending' },
@@ -50,6 +50,7 @@ export default function PenTestForm() {
   const [report, setReport] = useState<PerformPenTestOutput | null>(null);
   const [checklist, setChecklist] = useState<AttackVectorItem[]>(initialChecklist);
   const { toast } = useToast();
+  const reportRef = useRef<HTMLDivElement>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -77,6 +78,30 @@ export default function PenTestForm() {
     }
     return () => clearTimeout(timer);
   }, [loading, progress, checklist.length]);
+  
+  const handleDownloadPdf = async () => {
+    const element = reportRef.current;
+    if (!element) return;
+
+    // Dynamically import jspdf and html2canvas only when needed
+    const { default: jsPDF } = await import('jspdf');
+    const { default: html2canvas } = await import('html2canvas');
+
+    const canvas = await html2canvas(element, { scale: 2 });
+    const data = canvas.toDataURL('image/png');
+
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+    const imgWidth = canvas.width;
+    const imgHeight = canvas.height;
+    const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+    const imgX = (pdfWidth - imgWidth * ratio) / 2;
+    const imgY = 10;
+
+    pdf.addImage(data, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+    pdf.save(`pentest-report-${new Date().toISOString().split('T')[0]}.pdf`);
+  };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
@@ -103,7 +128,7 @@ export default function PenTestForm() {
 
     // Update checklist based on report
     setChecklist(prev => prev.map(item => {
-        const reportedVector = result.report?.simulatedAttackVectors.find(v => v.vector.includes(item.vector));
+        const reportedVector = result.report?.simulatedAttackVectors.find(v => v.vector.includes(item.vector) || item.vector.includes(v.vector));
         return {
             ...item,
             status: 'completed',
@@ -121,7 +146,7 @@ export default function PenTestForm() {
       case 'completed':
         if(exploited === true) return <XCircle className="h-4 w-4 text-destructive" />;
         if(exploited === false) return <CheckCircle2 className="h-4 w-4 text-green-500" />;
-        return <CheckCircle2 className="h-4 w-4 text-muted-foreground" />; // Default if exploited is undefined
+        return <CheckCircle2 className="h-4 w-4 text-muted-foreground" />;
       case 'pending':
       default:
         return <div className="h-4 w-4 rounded-full border-2 border-muted-foreground" />;
@@ -164,7 +189,7 @@ export default function PenTestForm() {
                 <p className="text-center text-sm text-accent mt-2">{progress}% - Simulating attack vectors...</p>
               </div>
             )}
-            <ul className="space-y-2">
+            <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2">
               {checklist.map((item, index) => (
                 <li key={index} className={cn("flex items-center gap-3 transition-colors", item.status === 'pending' ? 'text-muted-foreground' : 'text-foreground')}>
                    {getStatusIcon(item.status, item.exploited)}
@@ -177,15 +202,66 @@ export default function PenTestForm() {
       )}
 
       {report && (
-        <Alert>
-          <Terminal className="h-4 w-4" />
-          <AlertTitle>Penetration Test Complete!</AlertTitle>
-          <AlertDescription>
-             The simulation has finished. Review the executive summary below. A full report would be available in a real-world scenario.
-             <p className="mt-4 font-semibold">Executive Summary:</p>
-             <p className="text-muted-foreground">{report.executiveSummary}</p>
-          </AlertDescription>
-        </Alert>
+        <div ref={reportRef} className="p-4 bg-card rounded-lg">
+          <Card className="border-none shadow-none">
+            <CardHeader>
+              <CardTitle className="text-2xl">Penetration Test Report</CardTitle>
+              <CardDescription>
+                This report details the findings of the simulated penetration test.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div>
+                <h3 className="text-lg font-semibold">Executive Summary</h3>
+                <p className="text-muted-foreground">{report.executiveSummary}</p>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold">Attack Narrative</h3>
+                <p className="text-muted-foreground">{report.attackNarrative}</p>
+              </div>
+              <Separator />
+              <div>
+                <h3 className="text-lg font-semibold mb-2">Simulated Attack Vectors</h3>
+                <Accordion type="single" collapsible className="w-full">
+                  {report.simulatedAttackVectors.map((vector, index) => (
+                    <AccordionItem value={`vector-${index}`} key={index}>
+                      <AccordionTrigger>
+                        <div className="flex items-center gap-4 flex-1 text-left">
+                           {vector.exploited ? <ShieldX className="h-5 w-5 text-destructive" /> : <CheckCircle2 className="h-5 w-5 text-green-500" />}
+                          <span className="font-semibold">{vector.vector}</span>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="space-y-4 px-2">
+                        <div>
+                            <h4 className="font-semibold text-foreground mb-1">Description</h4>
+                            <p className="text-muted-foreground">{vector.description}</p>
+                        </div>
+                        <Separator />
+                        <div>
+                            <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2"><Code2 className="h-4 w-4" /> Proof of Concept (POC)</h4>
+                            <pre className="bg-muted p-3 rounded-md text-xs overflow-x-auto text-muted-foreground whitespace-pre-wrap font-code">
+                                <code>{vector.poc}</code>
+                            </pre>
+                        </div>
+                        <Separator />
+                        <div>
+                           <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2"><Wrench className="h-4 w-4" /> Remediation</h4>
+                            <p className="text-muted-foreground whitespace-pre-wrap">{vector.remediation}</p>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              </div>
+            </CardContent>
+            <CardFooter>
+                <Button onClick={handleDownloadPdf} className="ml-auto">
+                    <Download className="mr-2 h-4 w-4" />
+                    Download PDF
+                </Button>
+            </CardFooter>
+          </Card>
+        </div>
       )}
     </div>
   );
