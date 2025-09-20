@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle, ScanSearch, Shield, Target } from 'lucide-react';
+import { CheckCircle, Linkedin, ScanSearch, Shield, Target } from 'lucide-react';
 import Link from 'next/link';
 
 const features = [
@@ -138,6 +138,12 @@ export default function RootPage() {
           <div className="flex items-center gap-2">
             <Shield className="w-5 h-5 text-accent" />
             <span className="text-sm">AegisAI &copy; {new Date().getFullYear()}</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <span>Developed by T Jai Surya Prasad</span>
+            <Link href="https://www.linkedin.com/in/jaisuryaprasad/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground">
+              <Linkedin className="w-5 h-5" />
+            </Link>
           </div>
           <nav className="flex gap-4 text-sm text-muted-foreground">
             <Link href="/terms" className="hover:text-foreground">Terms of Service</Link>
