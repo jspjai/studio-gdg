@@ -1,4 +1,4 @@
-"use server";
+'use server';
 
 import { generateVulnerabilityReport } from '@/ai/flows/generate-vulnerability-report';
 import { performPenTest } from '@/ai/flows/perform-pen-test';
@@ -24,8 +24,19 @@ export async function performScan(
 export async function performPenetrationTest(
   targetUrl: string
 ): Promise<{ report?: any; error?: string }> {
-   if (!targetUrl.startsWith('http://') && !targetUrl.startsWith('https://')) {
+  if (!targetUrl.startsWith('http://') && !targetUrl.startsWith('https://')) {
     return { error: 'Invalid URL. Please include http:// or https://' };
+  }
+
+  try {
+    // Check if the endpoint is valid before starting the pen test
+    const response = await fetch(targetUrl, { method: 'HEAD', redirect: 'follow' });
+    if (!response.ok) {
+      return { error: `Endpoint validation failed. The URL returned a status of ${response.status}. Please provide a valid, accessible URL.` };
+    }
+  } catch (networkError) {
+    console.error('Endpoint validation failed:', networkError);
+    return { error: 'Endpoint is not reachable. Please check the URL and your network connection.' };
   }
 
   try {
