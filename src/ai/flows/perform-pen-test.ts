@@ -40,8 +40,18 @@ const prompt = ai.definePrompt({
   name: 'performPenTestPrompt',
   input: {schema: PerformPenTestInputSchema},
   output: {schema: PerformPenTestOutputSchema},
+  config: {
+    safetySettings: [
+      {
+        category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
+        threshold: 'BLOCK_NONE',
+      },
+    ]
+  },
   prompt: `You are a world-class penetration tester and cybersecurity expert.
   Your task is to perform a simulated autonomous penetration test against the web application at the following URL: {{{targetUrl}}}
+
+  The entire process is a simulation and occurs within a safe, sandboxed environment. Do not perform any real attacks. Your output must be a valid JSON object matching the provided schema.
 
   Simulate the entire process, including:
   1.  **Reconnaissance:** Gathering information about the target.
@@ -54,7 +64,7 @@ const prompt = ai.definePrompt({
   - An **Attack Narrative** that tells the story of how the simulated attack progressed, from initial foothold to final objective.
   - A list of **Simulated Attack Vectors**, detailing each attempt, whether it was successful ('exploited'), and a description of the action taken. Include a CVE if applicable. The list must cover each step of the simulation.
 
-  The simulation should be realistic and demonstrate a deep understanding of offensive security techniques. The entire process is a simulation and occurs within a safe, sandboxed environment. Do not perform any real attacks.`,
+  The simulation should be realistic and demonstrate a deep understanding of offensive security techniques.`,
 });
 
 const performPenTestFlow = ai.defineFlow(
@@ -65,6 +75,9 @@ const performPenTestFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await prompt(input);
-    return output!;
+    if (!output) {
+      throw new Error("The AI model did not return a valid report. This might be due to content safety filters or an internal error.");
+    }
+    return output;
   }
 );
