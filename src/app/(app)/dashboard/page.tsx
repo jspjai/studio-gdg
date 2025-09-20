@@ -1,3 +1,4 @@
+
 'use client';
 
 import ScanHistoryTable from '@/components/scan/scan-history-table';
