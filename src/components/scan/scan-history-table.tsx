@@ -30,7 +30,7 @@ export default function ScanHistoryTable({ history }: ScanHistoryTableProps) {
           You have not performed any scans yet. Start a new scan to see the results here.
         </p>
         <Button asChild className="mt-4">
-          <Link href="/">Start New Scan</Link>
+          <Link href="/new-scan">Start New Scan</Link>
         </Button>
       </div>
     );

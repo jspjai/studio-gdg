@@ -60,7 +60,7 @@ export default function LandingPage() {
               </CardContent>
               <div className="p-6 pt-0">
                 <Button asChild className="w-full">
-                  <Link href="/dashboard">Scan Your Website</Link>
+                  <Link href="/new-scan">Scan Your Website</Link>
                 </Button>
               </div>
             </Card>
