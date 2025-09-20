@@ -48,9 +48,6 @@ export default function RootPage() {
                   AegisAI leverages cutting-edge AI to provide comprehensive vulnerability scanning and autonomous penetration testing. Secure your web applications before attackers strike.
                 </p>
                 <div className="mt-10 flex items-center justify-center gap-x-6">
-                  <Button asChild size="lg">
-                    <Link href="/dashboard">Start Your First Scan</Link>
-                  </Button>
                   <Button asChild variant="outline" size="lg">
                     <Link href="#features">Learn More</Link>
                   </Button>
